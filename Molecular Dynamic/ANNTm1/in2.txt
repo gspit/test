@@ -1,0 +1,73 @@
+units real  
+atom_style full  
+boundary p p p  
+pair_style lj/class2/coul/long 12.0 12.0  
+special_bonds  lj 0 0 1 coul 0 0 1
+bond_style class2  
+angle_style class2  
+dihedral_style class2  
+improper_style class2  
+dielectric 1.0  
+kspace_style ewald 0.001  
+read_data lammps.data  
+pair_modify  mix sixthpower
+#element_type C H O C O H N H  
+
+reset_timestep 0
+min_style cg
+minimize 1e-6 1e-6 2000 20000
+
+
+# ============================================
+# Low-temperature equilibration (solid state)
+# ============================================
+
+timestep 1.0
+
+velocity all create 300.0 928374 dist gaussian mom yes rot yes
+
+fix EQ all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0
+
+thermo_style custom step temp press pe etotal enthalpy vol density
+thermo 1000
+
+run 500000     # 500 ps
+
+unfix EQ
+
+
+# ============================================
+# Heating scan: enthalpy vs temperature
+# ============================================
+
+variable T equal 300
+variable T_end equal 900
+variable dT equal 10
+
+shell echo "# T(K)    Enthalpy(kcal/mol)    Volume(A^3)" > H_T.dat
+
+label loop_T
+if "${T} > ${T_end}" then "jump SELF end_loop"
+
+reset_timestep 0
+velocity all create ${T} 293847 dist gaussian mom yes rot yes
+
+fix NPT all npt temp ${T} ${T} 100.0 iso 1.0 1.0 1000.0
+
+thermo_style custom step temp press enthalpy vol density
+thermo 2000
+
+run 500000
+
+variable H equal enthalpy
+variable V equal vol
+print "${T} ${H} ${V}" append H_T.dat
+
+unfix NPT
+
+variable T equal ${T}+${dT}
+jump SELF loop_T
+
+label end_loop
+
+print "Heating scan finished."
