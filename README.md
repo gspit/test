@@ -76,24 +76,6 @@ pip install numpy scipy pandas
 ### Data Files
 All data files are included in the `data/` directory. No external downloads required.
 
-
-
-## Citation
-
-If you use this code or data in your research, please cite:
-
-```bibtex
-@article{Guo2026,
-  title={Prediction of Polymer Melting Temperature Using Deep Learning, Descriptor Models, and Molecular Dynamics Validation},
-  author={Guo, Haiqian and Wang, Yaling and Zan, Wei and Liu, Jiejie and Ba, Xinwu},
-  journal={Computational Materials Science},
-  year={2026},
-  volume={},
-  pages={},
-  doi={}
-}
-```
-
 ## License
 
 This project is licensed under the MIT License — see the LICENSE file for details.
