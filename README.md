@@ -9,7 +9,6 @@ This repository contains the complete implementation, data, and validation resul
 
 ```
 .
-├── data/                          # Training and test datasets
 │   ├── train_data.csv             # 3,660 polymers with Tm
 │   ├── Regression_Tm.xlsx         # Regression analysis dataset
 │   ├── PI1M50K_Prediction_Results.xlsx  # Model predictions
